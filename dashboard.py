@@ -39,7 +39,15 @@ def plot_score_heatmap(df):
         return fig
     except Exception:
         # fallback if no component breakdown provided
-        fig = px.bar(df, x='Symbol', y='Score', color='Sector', title='Scores by Sector')
+        fig = px.barh(
+            df.sort_values("Score"),
+            y="Symbol",
+            x="Score",
+            color="Sector",
+            title="Scores by Sector (Horizontal View)",
+            color_discrete_sequence=px.colors.qualitative.Set3
+        )
+        fig.update_layout(yaxis={'categoryorder':'total ascending'})
         return fig
 
 def plot_vix_history(vix_df):
@@ -52,14 +60,15 @@ def plot_vix_history(vix_df):
 # ----------------------------------------------
 # 🖥️ Streamlit App
 # ----------------------------------------------
-st.set_page_config(page_title="Portfolio Scoring System v2.2", layout="wide")
-st.title("📊 Portfolio Scoring System v2.2 – Live Dashboard")
+st.set_page_config(page_title="Portfolio Scoring System v2.3", layout="wide")
+st.title("📊 Portfolio Scoring System v2.3 – Live Dashboard")
 
 # Load data
 df = load_portfolio_data()
 
-# 🛡️ Prevent missing columns from breaking the app
-for col in ["Prev_Score", "Score_Change", "Verdict", "Weight"]:
+# 🛡️ Ensure required columns exist
+required_cols = ["Prev_Score", "Score_Change", "Verdict", "Weight"]
+for col in required_cols:
     if col not in df.columns:
         df[col] = 0.0 if col != "Verdict" else "N/A"
 
@@ -71,13 +80,17 @@ st.sidebar.header("⚙️ Controls")
 view = st.sidebar.selectbox("View", ["Overview", "Scores", "Alerts", "Risk Monitor"])
 vix_level = st.sidebar.number_input("Current VIX", min_value=10.0, max_value=80.0, value=18.0)
 
+# ----------------------------------------------
+# 🌐 Pages
+# ----------------------------------------------
+
 # Overview Page
 if view == "Overview":
     st.subheader("Portfolio Overview")
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Average Score", f"{df['Score'].mean():.2f}")
-        st.metric("Sharpe Estimate", f"{(df['Score'].mean()/df['Risk'].mean()):.2f}")
+        st.metric("Sharpe Estimate", f"{(df['Score'].mean()/max(df['Risk'].mean(), 0.1)):.2f}")
     with col2:
         fig_sector = plot_sector_allocation(df)
         st.plotly_chart(fig_sector, use_container_width=True)
@@ -87,10 +100,41 @@ if view == "Overview":
 # Scores Page
 elif view == "Scores":
     st.subheader("Detailed Scores")
-    sector_filter = st.multiselect("Filter by Sector", sorted(df['Sector'].unique()), default=sorted(df['Sector'].unique()))
-    filtered_df = df[df['Sector'].isin(sector_filter)]
-    fig_heatmap = plot_score_heatmap(filtered_df)
-    st.plotly_chart(fig_heatmap, use_container_width=True)
+
+    # Sector filter
+    sector_filter = st.multiselect(
+        "Filter by Sector",
+        sorted(df['Sector'].unique()),
+        default=sorted(df['Sector'].unique())
+    )
+
+    # Score slider filter
+    min_score, max_score = st.slider(
+        "Filter by Total Score",
+        float(df['Score'].min()),
+        float(df['Score'].max()),
+        (float(df['Score'].min()), float(df['Score'].max()))
+    )
+
+    # Apply filters
+    filtered_df = df[
+        (df['Sector'].isin(sector_filter)) &
+        (df['Score'] >= min_score) &
+        (df['Score'] <= max_score)
+    ]
+
+    # Horizontal bar chart
+    fig_scores = px.barh(
+        filtered_df.sort_values("Score"),
+        y="Symbol",
+        x="Score",
+        color="Sector",
+        title="Scores by Sector (Filtered)",
+        color_discrete_sequence=px.colors.qualitative.Vivid
+    )
+    fig_scores.update_layout(yaxis={'categoryorder':'total ascending'}, height=800)
+    st.plotly_chart(fig_scores, use_container_width=True)
+
     st.dataframe(filtered_df[['Symbol', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']])
 
 # Alerts Page
