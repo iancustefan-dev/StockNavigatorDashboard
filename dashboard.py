@@ -62,8 +62,8 @@ def plot_vix_history(vix_df):
 # ----------------------------------------------
 # 🖥️ Streamlit App
 # ----------------------------------------------
-st.set_page_config(page_title="Portfolio Scoring System v2.5", layout="wide")
-st.title("📊 Portfolio Scoring System v2.5 – Live Dashboard")
+st.set_page_config(page_title="Portfolio Scoring System v2.6", layout="wide")
+st.title("📊 Portfolio Scoring System v2.6 – Live Dashboard")
 
 # Load data
 df = load_portfolio_data()
@@ -97,7 +97,12 @@ if view == "Overview":
         fig_sector = plot_sector_allocation(df)
         st.plotly_chart(fig_sector, use_container_width=True)
 
-    st.dataframe(df[['Symbol', 'Company', 'Sector', 'Score', 'Verdict']].sort_values('Score', ascending=False))
+    st.dataframe(
+        df[['Symbol', 'Company', 'Sector', 'Score', 'Verdict']]
+        .sort_values('Score', ascending=False)
+        .reset_index(drop=True),
+        hide_index=True
+    )
 
 # Scores Page
 elif view == "Scores":
@@ -129,8 +134,12 @@ elif view == "Scores":
     fig_scores = plot_score_chart_colored(filtered_df)
     st.plotly_chart(fig_scores, use_container_width=True)
 
-    # Table view
-    st.dataframe(filtered_df[['Symbol', 'Sector', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']])
+    # Clean table (no index)
+    st.dataframe(
+        filtered_df[['Symbol', 'Sector', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']]
+        .reset_index(drop=True),
+        hide_index=True
+    )
 
 # Alerts Page
 elif view == "Alerts":
