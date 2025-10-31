@@ -1,4 +1,55 @@
-Symbol,Company,Sector,Score,Prev_Score,Fundamental,Technical,Macro,Sentiment,Risk,Weight,Verdict,Volatility,Category,Score_Component
-NVDA,Nvidia,Tech,8.6,8.1,9.5,8.5,9.0,10,7.0,0.12,BUY,0.22,Fundamental,9.5
-MSFT,Microsoft,Tech,7.9,7.5,8.7,8.0,8.5,9.0,6.5,0.10,BUY,0.19,Technical,8.0
-XOM,Exxon Mobil,Energy,6.3,6.5,6.0,6.5,8.0,5.0,9.0,0.08,HOLD,0.18,Macro,8.0
+Symbol,Company,Sector,Fundamental,Technical,Macro,Sentiment,Risk,Score,Verdict,Weight
+US.DOMH,Dominari Holdings,AI,7.8,8.5,8.0,9.0,6.0,8.1,BUY,1.8
+US.BBAI,Bigbear Holdings Inc,AI,7.5,8.2,8.1,9.2,6.5,8.1,BUY,1.8
+US.SERV,Serve Robotics Inc,AI,6.8,7.8,7.5,8.9,5.8,7.4,HOLD,1.5
+US.SOUN,Soundhound Ai,AI,8.0,8.8,8.2,9.5,6.2,8.5,BUY,2.0
+US.UUUU,Energy Fuels Inc,Energy,7.0,7.2,8.8,6.5,7.8,7.6,BUY,2.0
+US.TME,Tencent Music Entertainment Group,Media,7.2,7.5,7.0,6.5,7.0,7.1,HOLD,1.5
+US.SMR,Nuscale Power Corporation,Nuclear,8.5,7.8,8.0,8.2,6.8,8.0,BUY,2.0
+US.NNE,Nano Nuclear Energy Inc,Nuclear,8.0,8.0,8.5,8.0,6.5,8.2,BUY,2.0
+US.SMCI,Super Micro Computer,Tech,9.2,8.8,8.5,9.0,7.5,8.9,BUY,2.2
+US.IBKR,Interactive Brokers Group,Finance,8.5,7.5,7.8,7.5,8.0,7.9,BUY,1.8
+US.CCJ,Cameco Corporation,Nuclear,8.8,8.2,8.0,7.5,7.0,8.1,BUY,2.0
+US.XOM,Exxon Mobil Corporation,Energy,8.0,6.5,8.5,6.5,9.0,7.9,BUY,2.2
+US.OKLO,Oklo Inc,Nuclear,7.5,8.0,8.8,7.5,6.8,7.9,BUY,2.0
+US.TJX,Tjx Cos Inc,Retail,7.2,7.0,7.5,6.8,8.0,7.3,HOLD,1.8
+US.HOOD,Robinhood Markets,Finance,6.5,7.8,7.2,8.5,6.0,7.2,HOLD,1.5
+US.ANET,Arista Networks,Tech,9.0,8.5,8.2,8.0,7.0,8.5,BUY,2.0
+US.DELL,Dell Technologies Inc,Tech,8.8,8.2,7.5,8.0,7.2,8.1,BUY,2.0
+DE.NVD,Nvidia,Tech,9.5,9.2,9.0,10.0,7.0,9.3,BUY,2.5
+US.ARM,Arm Holdings plc,Tech,8.5,8.0,8.2,8.5,6.8,8.2,BUY,2.0
+US.VST,Vistra Energy,Energy,8.0,7.2,8.0,6.5,8.2,7.7,BUY,2.0
+US.LEU,Centrus Energy Corp,Nuclear,8.5,8.0,8.8,8.5,7.2,8.4,BUY,2.0
+US.CEG,Constellation Energy Corp,Energy,8.2,7.8,8.0,7.5,8.0,8.0,BUY,2.0
+US.VRT,Vertiv Holdings Co,Industrial,8.8,8.5,8.2,8.0,7.0,8.4,BUY,2.0
+US.NVT,nVent Electric plc,Industrial,7.8,7.2,7.5,7.0,8.0,7.5,HOLD,1.8
+US.RMBS,Rambus Inc,Tech,8.2,8.5,8.0,8.5,7.5,8.3,BUY,2.0
+US.PANW,Palo Alto Networks Inc,Cybersecurity,9.0,8.8,8.5,8.8,7.2,8.6,BUY,2.0
+US.ZS,Zscaler,Cybersecurity,8.5,8.2,8.5,8.0,7.0,8.2,BUY,2.0
+US.POWL,Powell Industries,Industrial,8.5,7.8,8.0,7.0,7.5,7.9,BUY,2.0
+US.FN,Fabrinet,Tech,8.8,8.2,8.0,8.0,7.2,8.2,BUY,2.0
+US.CYBR,Cyberark Software Ltd,Cybersecurity,8.2,8.0,8.5,8.2,7.0,8.2,BUY,2.0
+US.CRWD,Crowdstrike Holdings,Cybersecurity,9.0,8.5,8.5,9.0,7.5,8.7,BUY,2.2
+US.INOD,Innodata,AI,7.5,7.8,8.0,8.5,6.5,7.8,BUY,1.8
+US.MU,Micron Technology,Tech,8.5,8.2,8.5,8.0,7.5,8.3,BUY,2.0
+US.PWR,Quanta Services Inc,Industrial,8.0,7.8,8.0,7.5,7.5,7.8,BUY,2.0
+US.TSLA,Tesla Inc,EV,7.5,8.0,8.0,9.0,5.0,7.5,HOLD,2.0
+US.LMT,Lockheed Martin Corporation,Defense,8.8,7.5,7.5,7.0,8.5,7.9,BUY,2.0
+US.CAT,Caterpillar Inc,Industrial,8.5,7.8,8.0,7.0,8.0,7.9,BUY,2.0
+US.MSFT,Microsoft Corporation,Tech,9.5,8.8,8.5,9.5,7.0,9.0,BUY,2.5
+US.APP,Applovin Corp,Tech,8.0,8.2,8.0,8.5,6.5,8.1,BUY,1.8
+US.NVDA,Nvidia,Tech,9.5,9.0,9.0,10.0,7.0,9.3,BUY,2.5
+DE.AMZ,Amazon.com (German listing),Retail,8.2,8.0,8.5,8.0,6.8,8.1,BUY,2.0
+US.AMZN,Amazon.com Inc,Retail,8.8,8.5,8.5,8.5,7.0,8.5,BUY,2.2
+US.AMD,Advanced Micro Devices,Tech,8.8,8.5,8.0,8.8,6.8,8.4,BUY,2.0
+US.TSM,Taiwan Semiconductor Manufacturing,Semiconductors,9.0,8.8,8.5,8.5,7.5,8.7,BUY,2.2
+US.FLY,Firefly Neuroscience,Biotech,7.0,7.2,7.5,8.0,5.8,7.1,HOLD,1.5
+US.BMRA,Biomerica,Biotech,7.2,7.5,7.5,7.8,6.0,7.2,HOLD,1.5
+US.ACB,Aurora Cannabis Inc,Biotech,6.5,7.0,7.0,8.0,5.0,6.8,SELL,1.2
+US.ACHR,Archer Aviation Inc,EV,7.8,8.0,8.2,8.5,6.0,8.1,BUY,1.8
+US.ZIM,Zim Integrated Shipping Services,Transport,7.0,7.5,8.0,6.5,6.8,7.2,HOLD,1.5
+US.KDLY,Kindly Md,Biotech,7.5,7.8,7.8,8.0,6.0,7.6,BUY,1.8
+US.QBTS,D-Wave Quantum,Quantum,8.5,8.0,8.5,8.8,6.5,8.3,BUY,2.0
+US.PGY,Pagaya Technologies,Fintech,7.8,8.0,8.0,8.5,6.0,7.9,BUY,1.8
+US.LITE,Lumentum Holdings,Tech,8.0,7.8,7.8,7.0,7.2,7.6,HOLD,1.8
+US.CLS,Celestica Inc,Tech,8.5,8.5,8.0,8.2,7.0,8.3,BUY,2.0
