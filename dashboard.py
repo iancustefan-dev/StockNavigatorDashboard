@@ -29,12 +29,18 @@ def calculate_alerts(df):
 def plot_sector_allocation(df):
     sector_summary = df.groupby('Sector')['Weight'].sum().reset_index()
     fig = px.pie(sector_summary, values='Weight', names='Sector', title='Sector Allocation', hole=0.4)
+    fig.update_traces(textinfo='percent+label')
     return fig
 
 def plot_score_heatmap(df):
-    pivot = df.pivot(index='Symbol', columns='Category', values='Score_Component')
-    fig = px.imshow(pivot, color_continuous_scale='RdYlGn', title='Score Breakdown Heatmap')
-    return fig
+    try:
+        pivot = df.pivot(index='Symbol', columns='Category', values='Score_Component')
+        fig = px.imshow(pivot, color_continuous_scale='RdYlGn', title='Score Breakdown Heatmap')
+        return fig
+    except Exception:
+        # fallback if no component breakdown provided
+        fig = px.bar(df, x='Symbol', y='Score', color='Sector', title='Scores by Sector')
+        return fig
 
 def plot_vix_history(vix_df):
     fig = go.Figure()
@@ -51,9 +57,16 @@ st.title("📊 Portfolio Scoring System v2.2 – Live Dashboard")
 
 # Load data
 df = load_portfolio_data()
-df['Score_Change'] = df['Score'] - df['Prev_Score']
 
-# Sidebar
+# 🛡️ Prevent missing columns from breaking the app
+for col in ["Prev_Score", "Score_Change", "Verdict", "Weight"]:
+    if col not in df.columns:
+        df[col] = 0.0 if col != "Verdict" else "N/A"
+
+# Compute score change safely
+df["Score_Change"] = df["Score"] - df["Prev_Score"]
+
+# Sidebar controls
 st.sidebar.header("⚙️ Controls")
 view = st.sidebar.selectbox("View", ["Overview", "Scores", "Alerts", "Risk Monitor"])
 vix_level = st.sidebar.number_input("Current VIX", min_value=10.0, max_value=80.0, value=18.0)
@@ -64,19 +77,21 @@ if view == "Overview":
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Average Score", f"{df['Score'].mean():.2f}")
-        st.metric("Sharpe Estimate", f"{(df['Score'].mean()/df['Volatility'].mean()):.2f}")
+        st.metric("Sharpe Estimate", f"{(df['Score'].mean()/df['Risk'].mean()):.2f}")
     with col2:
         fig_sector = plot_sector_allocation(df)
         st.plotly_chart(fig_sector, use_container_width=True)
 
-    st.dataframe(df[['Symbol', 'Company', 'Sector', 'Score', 'Verdict']].sort_values('Score', ascending=False).head(10))
+    st.dataframe(df[['Symbol', 'Company', 'Sector', 'Score', 'Verdict']].sort_values('Score', ascending=False))
 
 # Scores Page
 elif view == "Scores":
     st.subheader("Detailed Scores")
-    fig_heatmap = plot_score_heatmap(df)
+    sector_filter = st.multiselect("Filter by Sector", sorted(df['Sector'].unique()), default=sorted(df['Sector'].unique()))
+    filtered_df = df[df['Sector'].isin(sector_filter)]
+    fig_heatmap = plot_score_heatmap(filtered_df)
     st.plotly_chart(fig_heatmap, use_container_width=True)
-    st.dataframe(df[['Symbol', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']])
+    st.dataframe(filtered_df[['Symbol', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']])
 
 # Alerts Page
 elif view == "Alerts":
