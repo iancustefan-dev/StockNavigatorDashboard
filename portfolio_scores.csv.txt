@@ -1,0 +1,4 @@
+Symbol,Company,Sector,Score,Prev_Score,Fundamental,Technical,Macro,Sentiment,Risk,Weight,Verdict,Volatility,Category,Score_Component
+NVDA,Nvidia,Tech,8.6,8.1,9.5,8.5,9.0,10,7.0,0.12,BUY,0.22,Fundamental,9.5
+MSFT,Microsoft,Tech,7.9,7.5,8.7,8.0,8.5,9.0,6.5,0.10,BUY,0.19,Technical,8.0
+XOM,Exxon Mobil,Energy,6.3,6.5,6.0,6.5,8.0,5.0,9.0,0.08,HOLD,0.18,Macro,8.0
