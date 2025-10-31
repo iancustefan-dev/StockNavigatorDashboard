@@ -32,23 +32,24 @@ def plot_sector_allocation(df):
     fig.update_traces(textinfo='percent+label')
     return fig
 
-def plot_score_heatmap(df):
-    try:
-        pivot = df.pivot(index='Symbol', columns='Category', values='Score_Component')
-        fig = px.imshow(pivot, color_continuous_scale='RdYlGn', title='Score Breakdown Heatmap')
-        return fig
-    except Exception:
-        # fallback if no component breakdown provided
-        fig = px.barh(
-            df.sort_values("Score"),
-            y="Symbol",
-            x="Score",
-            color="Sector",
-            title="Scores by Sector (Horizontal View)",
-            color_discrete_sequence=px.colors.qualitative.Set3
-        )
-        fig.update_layout(yaxis={'categoryorder':'total ascending'})
-        return fig
+def plot_score_chart(df):
+    """Horizontal bar chart colorized by sector"""
+    fig = px.bar(
+        df.sort_values("Score"),
+        x="Score",
+        y="Symbol",
+        color="Sector",
+        orientation="h",
+        title="Scores by Sector (Horizontal)",
+        color_discrete_sequence=px.colors.qualitative.Vivid
+    )
+    fig.update_layout(
+        yaxis={'categoryorder': 'total ascending'},
+        height=800,
+        xaxis_title="Composite Score",
+        yaxis_title="Symbol"
+    )
+    return fig
 
 def plot_vix_history(vix_df):
     fig = go.Figure()
@@ -60,8 +61,8 @@ def plot_vix_history(vix_df):
 # ----------------------------------------------
 # 🖥️ Streamlit App
 # ----------------------------------------------
-st.set_page_config(page_title="Portfolio Scoring System v2.3", layout="wide")
-st.title("📊 Portfolio Scoring System v2.3 – Live Dashboard")
+st.set_page_config(page_title="Portfolio Scoring System v2.4", layout="wide")
+st.title("📊 Portfolio Scoring System v2.4 – Live Dashboard")
 
 # Load data
 df = load_portfolio_data()
@@ -123,18 +124,11 @@ elif view == "Scores":
         (df['Score'] <= max_score)
     ]
 
-    # Horizontal bar chart
-    fig_scores = px.barh(
-        filtered_df.sort_values("Score"),
-        y="Symbol",
-        x="Score",
-        color="Sector",
-        title="Scores by Sector (Filtered)",
-        color_discrete_sequence=px.colors.qualitative.Vivid
-    )
-    fig_scores.update_layout(yaxis={'categoryorder':'total ascending'}, height=800)
+    # Horizontal colorized bar chart
+    fig_scores = plot_score_chart(filtered_df)
     st.plotly_chart(fig_scores, use_container_width=True)
 
+    # Table view
     st.dataframe(filtered_df[['Symbol', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']])
 
 # Alerts Page
