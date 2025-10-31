@@ -32,22 +32,23 @@ def plot_sector_allocation(df):
     fig.update_traces(textinfo='percent+label')
     return fig
 
-def plot_score_chart(df):
-    """Horizontal bar chart colorized by sector"""
+def plot_score_chart_colored(df):
+    """Horizontal bar chart colorized by Score (red→green gradient)."""
     fig = px.bar(
         df.sort_values("Score"),
         x="Score",
         y="Symbol",
-        color="Sector",
+        color="Score",
         orientation="h",
-        title="Scores by Sector (Horizontal)",
-        color_discrete_sequence=px.colors.qualitative.Vivid
+        color_continuous_scale="RdYlGn",
+        title="Scores by Company (colored by total score)"
     )
     fig.update_layout(
         yaxis={'categoryorder': 'total ascending'},
         height=800,
         xaxis_title="Composite Score",
-        yaxis_title="Symbol"
+        yaxis_title="Symbol",
+        coloraxis_colorbar=dict(title="Score")
     )
     return fig
 
@@ -61,8 +62,8 @@ def plot_vix_history(vix_df):
 # ----------------------------------------------
 # 🖥️ Streamlit App
 # ----------------------------------------------
-st.set_page_config(page_title="Portfolio Scoring System v2.4", layout="wide")
-st.title("📊 Portfolio Scoring System v2.4 – Live Dashboard")
+st.set_page_config(page_title="Portfolio Scoring System v2.5", layout="wide")
+st.title("📊 Portfolio Scoring System v2.5 – Live Dashboard")
 
 # Load data
 df = load_portfolio_data()
@@ -124,12 +125,12 @@ elif view == "Scores":
         (df['Score'] <= max_score)
     ]
 
-    # Horizontal colorized bar chart
-    fig_scores = plot_score_chart(filtered_df)
+    # Horizontal colorized bar chart (red→green by score)
+    fig_scores = plot_score_chart_colored(filtered_df)
     st.plotly_chart(fig_scores, use_container_width=True)
 
     # Table view
-    st.dataframe(filtered_df[['Symbol', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']])
+    st.dataframe(filtered_df[['Symbol', 'Sector', 'Fundamental', 'Technical', 'Macro', 'Sentiment', 'Risk', 'Score']])
 
 # Alerts Page
 elif view == "Alerts":
